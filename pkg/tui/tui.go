@@ -9,6 +9,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"tuinit/pkg/initsys"
 	"tuinit/pkg/util"
+	"github.com/charmbracelet/lipgloss"
     )
 
 func getSystemdVersion() string {
@@ -49,7 +50,7 @@ func getSystemdVersion() string {
 	return "Unknown"
     }
 
-func InitialModel() model {
+func InitialModel() *model {
     var initSystem, initSystemVersion, distro string
 
     // Detect init system
@@ -74,7 +75,7 @@ func InitialModel() model {
     // Get program version from util package
     programVersion := util.Version
 
-    return model{
+    return &model{
         initSystem:        initSystem,
         initSystemVersion: initSystemVersion,
         distro:            distro,
@@ -82,24 +83,36 @@ func InitialModel() model {
     }
 }
 
-func (m model) Init() tea.Cmd {
-    return nil
-}
-
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-    switch msg := msg.(type) {
-    case tea.KeyMsg:
-        if msg.String() == "q" || msg.String() == "ctrl+c" {
-            return m, tea.Quit
-        }
+func (m *model) Init() tea.Cmd {
+	return nil
     }
-    return m, nil
-}
+    
 
-func (m model) View() string {
+func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+	    m.width = msg.Width
+	    m.height = msg.Height
+	case tea.KeyMsg:
+	    if msg.String() == "q" || msg.String() == "ctrl+c" {
+		return m, tea.Quit
+	    }
+	}
+	return m, nil
+    }
+
+    func (m model) View() string {
 	header := fmt.Sprintf(
-	    "Init System: %s %s | Distro: %s | tuinit %s\n\n",
+	    "Init System: %s %s | Distro: %s | tuinit %s",
 	    m.initSystem, m.initSystemVersion, m.distro, m.programVersion,
 	)
-	return header + "Press 'q' to quit."
+    
+	styledHeader := headerStyle.Copy().
+	    Width(m.width).
+	    Align(lipgloss.Center).
+	    Render(header)
+    
+	return fmt.Sprintf("%s\n\nPress 'q' to quit.", styledHeader)
     }
+
+    

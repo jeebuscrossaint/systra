@@ -47,7 +47,7 @@ func main() {
 		os.Exit(1)
 	}
 
-        p := tea.NewProgram(tui.InitialModel())
+        p := tea.NewProgram(tui.InitialModel(), tea.WithAltScreen())
         if err := p.Start(); err != nil {
             fmt.Println("Error running program:", err)
             os.Exit(1)

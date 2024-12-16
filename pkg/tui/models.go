@@ -1,8 +1,10 @@
 package tui
 
 type model struct {
-	initSystem        string
-	initSystemVersion string
-	distro            string
-	programVersion    string
+    initSystem        string
+    initSystemVersion string
+    distro            string
+    programVersion    string
+    width             int
+    height            int
 }
