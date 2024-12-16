@@ -6,7 +6,9 @@ import (
 	"os"
 	"os/user"
 	"runtime"
-        "tuinit/pkg/initsys"
+
+        "github.com/charmbracelet/bubbletea"
+        "tuinit/pkg/tui"
 )
 
 const (
@@ -45,6 +47,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("tuinit is running as root")
-	initsys.IsSystemd()
+        p := tea.NewProgram(tui.InitialModel())
+        if err := p.Start(); err != nil {
+            fmt.Println("Error running program:", err)
+            os.Exit(1)
+        }
 }
