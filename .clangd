@@ -1,0 +1,4 @@
+CompileFlags:
+    Add:
+        - -isystem
+        - /usr/include/qt6
