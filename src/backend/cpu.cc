@@ -186,5 +186,70 @@ std::vector<cache> CPU::getCache() const {
 }
 
 power CPU::getPower() const {
+        power result = {0, 0, 0};
+        std::ifstream powerFile("/sys/class/power_supply/BAT0/power_now");
+        std::ifstream voltageFile("/sys/class/power_supply/BAT0/voltage_now");
+        std::ifstream currentFile("/sys/class/power_supply/BAT0/current_now");
+
+        if (powerFile) powerFile >> result.power;
+        if (voltageFile) voltageFile >> result.voltage;
+        if (currentFile) currentFile >> result.current;
+
+        powerFile.close();
+        voltageFile.close();
+        currentFile.close();
+
+        return result;
+}
+
+load CPU::getLoad() const {
+        load result = {0.0, 0.0, 0.0};
+        std::ifstream loadFile("/proc/loadavg");
+
+        if (loadFile) {
+                loadFile >> result.load1 >> result.load5 >> result.load15;
+        }
+
+        loadFile.close();
+
+        return result;
+}
+
+uint64_t CPU::interruptRate() const {
+        std::ifstream statFile("/proc/stat");
+        std::string line;
+
+        while (std::getline(stat, line)) {
+                if (line.substr(0, 4) == "intr") {
+                        uint64_t totalInterrupts = 0;
+                        stat >> totalInterrupts; // First number after intr is the total number of interrupts
+                        statFile.close();
+                        return totalInterrupts;
+                }
+        }
+
+        return 0;
+}
+
+bool isVirtual() const {
+        std::ifstream cpuinfo("/proc/cpuinfo");
+        std::string line;
+
+        while (std::getline(cpuinfo, line)) {
+                // Check common hypervisor signatures
+                if (line.find("hypervisor") != std::string::npos ||
+                    line.find("VMwareVMware") != std::string::npos ||
+                    line.find("KVM") != std::string::npos ||
+                    line.find("QEMU") != std::string::npos ||
+                    line.find("VirtualBox") != std::string::npos ||
+                    line.find("Xen") != std::string::npos) {
+                        return true;
+                }
+        }
+
+        return false;
+}
+
+uint64_t CPU::instructionsPerSec() const {
 
 }
