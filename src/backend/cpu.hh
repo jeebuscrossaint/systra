@@ -45,7 +45,6 @@ protected:
         load getLoad() const; // get the load of the cpu in 1, 5 and 15 minutes
         uint64_t interruptRate() const; // get the interrupt rate of the cpu
         bool isVirtual() const; // check if the cpu is virtual or not
-        uint64_t instructionsPerSec() const; // get the instructions per second of the cpu
 
 private:
         std::string model;
@@ -57,7 +56,6 @@ private:
         load load;
         uint64_t interrupt;
         bool virtualCpu;
-        uint64_t instructions;
 };
 
 

@@ -249,7 +249,3 @@ bool isVirtual() const {
 
         return false;
 }
-
-uint64_t CPU::instructionsPerSec() const {
-
-}
