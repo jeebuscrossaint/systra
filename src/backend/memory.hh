@@ -5,6 +5,11 @@
 #ifndef SYSTRA_MEMORY_HH
 #define SYSTRA_MEMORY_HH
 
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iostream>
+
 struct memoryStats {
         uint64_t total;
         uint64_t used;
