@@ -9,6 +9,12 @@
 #include <string>
 #include <vector>
 #include <regex>
+#include <iostream>
+#include <filesystem>
+#include <cstring>
+#include <sys/statvfs.h>
+
+namespace fs = std::filesystem;
 
 class DISK {
 public:
@@ -16,8 +22,7 @@ public:
         ~DISK();
 
 protected:
-	uint64_t getDiskUsage();
-	uint64_t getDiskFreeUsage();
+	std::vector<uint64_t> getDiskData();
         std::vector<std::string> getAllDisks();
 
 private:

@@ -1,4 +1,4 @@
 CompileFlags:
     Add:
         - -isystem
-        - /usr/include/qt6
+        - std=c++23

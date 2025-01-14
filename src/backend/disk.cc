@@ -7,23 +7,9 @@
 DISK::DISK() {};
 DISK::~DISK() {};
 
-std::vector<std::string> DISK::getAllDisks() {
-        std::vector<std::string> disks;
-        std::ifstream disksFile("/proc/partitions");
+// get critical disk data such as names usage free space human readable format percentage used other stuff
 
-        if (disksFile.is_open()) {
-                std::string line;
-                while (std::getline(disksFile, line)) {
-                        // Extract disk names using regex
-                        std::smatch match;
-                        if (std::regex_search(line, match, std::regex("\\b(sd[a-z]|hd[a-z]|nvme[0-9]n[0-9])\\b"))) {
-                                disks.push_back(match[1]);
-                        }
-                }
-                disksFile.close();
-        } else {
-                std::cerr << "Error opening /proc/partitions" << std::endl;
-        }
+std::vector<uint64_t> getDiskData() {
+        std::system("lsblk -o KNAME,TYPE,SIZE,MODEL");
+};
 
-        return disks;
-}
