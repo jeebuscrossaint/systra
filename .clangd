@@ -1,4 +1,0 @@
-CompileFlags:
-    Add:
-        - -isystem
-        - std=c++23
